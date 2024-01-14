@@ -17,7 +17,7 @@ export default function TextContainer() {
 const style = StyleSheet.create({
   textContainer: {
     width : windowWidth,
-    height: windowWidth,
+    height: windowWidth -20,
     display: 'flex',
     justifyContent: 'center',
     alignItems : 'center',

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
 import { sourates } from '../constants/sorats.list';
+
 const souratesList = sourates.map(item => item.nom)
 
 
@@ -18,7 +19,7 @@ export default function SelectVerset({ lastVersetOfSelectedSurah }) {
         for (let i = 1; i <= lastVersetOfSelectedSurah; i++) {
             versetsArray.push(i)
         }
-        setVersets(versetsArray)
+        setVersets(versetsArray) 
         setFirstVerset(0)
     }, [lastVersetOfSelectedSurah])
 
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: "row",
         gap: 20,
-        marginVertical: 20
+        marginVertical: 10
     },
     selectAyah: {
         width: 100,
