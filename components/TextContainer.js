@@ -2,13 +2,11 @@ import React from 'react'
 import  {View, Text, StyleSheet} from 'react-native'
 import { windowWidth } from '../style'
 
-export default function TextContainer() {
+export default function TextContainer({coranText}) {
+ console.log('coranText', coranText)
   return (
     <View style={style.textContainer} >
-      <Text style={style.text}>
-      Un texte est une série orale ou écrite de mots perçus comme constituant un ensemble cohérent, porteur de sens 
-      et utilisant les structures propres à une
-      </Text>
+      <Text style={style.text}> {coranText} </Text>
     </View>
   )
 }

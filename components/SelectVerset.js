@@ -9,7 +9,13 @@ import { sourates } from '../constants/sorats.list';
 const souratesList = sourates.map(item => item.nom)
 
 
-export default function SelectVerset({ lastVersetOfSelectedSurah }) {
+export default function SelectVerset(
+    {
+        lastVersetOfSelectedSurah,
+        setSelectsartVerset,
+        setSelectendVerset,
+        isPlaying
+    }) {
 
     const [versets, setVersets] = useState([])
     const [firstVerset, setFirstVerset] = useState(0)
@@ -19,7 +25,7 @@ export default function SelectVerset({ lastVersetOfSelectedSurah }) {
         for (let i = 1; i <= lastVersetOfSelectedSurah; i++) {
             versetsArray.push(i)
         }
-        setVersets(versetsArray) 
+        setVersets(versetsArray)
         setFirstVerset(0)
     }, [lastVersetOfSelectedSurah])
 
@@ -29,10 +35,12 @@ export default function SelectVerset({ lastVersetOfSelectedSurah }) {
                 buttonStyle={styles.selectAyah}
                 buttonTextStyle={styles.selectAyahText}
                 defaultValueByIndex={firstVerset}
+                disabled={isPlaying}
                 data={versets}
                 onSelect={(selectedItem, index) => {
                     console.log(selectedItem)
                     setFirstVerset(selectedItem)
+                    setSelectsartVerset(selectedItem)
                     // setLastVersetOfSelectedSurah(selectedItem.versets)
                 }}
                 buttonTextAfterSelection={(selectedItem, index) => {
@@ -46,9 +54,11 @@ export default function SelectVerset({ lastVersetOfSelectedSurah }) {
                 buttonStyle={styles.selectAyah}
                 buttonTextStyle={styles.selectAyahText}
                 defaultValueByIndex={versets.length - 1 ?? 7}
+                disabled={isPlaying}
                 data={versets}
                 onSelect={(selectedItem, index) => {
                     console.log(selectedItem)
+                    setSelectendVerset(selectedItem)
                     // setLastVersetOfSelectedSurah(selectedItem.versets)
                 }}
                 buttonTextAfterSelection={(selectedItem, index) => {

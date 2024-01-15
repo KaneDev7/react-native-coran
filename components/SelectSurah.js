@@ -8,18 +8,25 @@ import { sourates } from '../constants/sorats.list';
 const souratesList = sourates.map(item => item.nom)
 
 
-export default function SelectSurah({ setFirstVersetOfSelectedSurah,setLastVersetOfSelectedSurah }) {
+export default function SelectSurah({
+     setFirstVersetOfSelectedSurah,
+     setLastVersetOfSelectedSurah,
+     setSurahNumber,
+     isPlaying
+     }) {
     return (
         <View style={styles.surahContent} >
             <SelectDropdown
                 buttonStyle={styles.selectAyah}
                 buttonTextStyle={styles.selectAyahText}
                 data={sourates}
+                disabled={isPlaying}
                 defaultValueByIndex={0}
                 onSelect={(selectedItem, index) => {
                     console.log(selectedItem)
                     setLastVersetOfSelectedSurah(selectedItem.versets)
                     setFirstVersetOfSelectedSurah(0)
+                    setSurahNumber(selectedItem.numero)
                 }}
                 buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem.nom
