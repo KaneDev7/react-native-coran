@@ -4,63 +4,70 @@ import React, { useEffect, useState } from 'react'
 
 import { View, StyleSheet } from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
+import RNPickerSelect from 'react-native-picker-select';
 import { sourates } from '../constants/sorats.list';
 
-const souratesList = sourates.map(item => item.nom)
 
 
 export default function SelectVerset(
     {
         lastVersetOfSelectedSurah,
-        setSelectsartVerset,
-        setSelectendVerset,
-        isPlaying
+        setSelectSartVerset,
+        setSelectEndVerset,
+        currentIndex,
+        setCurrentSlide,
+        isPlaying,
     }) {
 
     const [versets, setVersets] = useState([])
-    const [firstVerset, setFirstVerset] = useState(0)
+    const [lastDeffaultValue, setLastDeffaultValue] = useState()
 
+    const lastDeffaultValueFn = (value) =>{
+        return value
+    }
     useEffect(() => {
         const versetsArray = []
-        for (let i = 1; i <= lastVersetOfSelectedSurah; i++) {
-            versetsArray.push(i)
+        let ration = 0
+        for (let index = 1; index <= lastVersetOfSelectedSurah; index++) {
+            versetsArray.push(index)
+            ration+=index
         }
+        console.log('ration',ration)
         setVersets(versetsArray)
-        setFirstVerset(0)
+        setSelectSartVerset(1)
+        setSelectEndVerset(versetsArray.length)
+        
     }, [lastVersetOfSelectedSurah])
-
+ 
     return (
         <View style={styles.selectAyahContent} >
             <SelectDropdown
                 buttonStyle={styles.selectAyah}
                 buttonTextStyle={styles.selectAyahText}
-                defaultValueByIndex={firstVerset}
+                defaultValue={versets ? versets.length - (sourates[currentIndex - 1]?.versets-1) : 1 }
                 disabled={isPlaying}
                 data={versets}
                 onSelect={(selectedItem, index) => {
-                    console.log(selectedItem)
-                    setFirstVerset(selectedItem)
-                    setSelectsartVerset(selectedItem)
-                    // setLastVersetOfSelectedSurah(selectedItem.versets)
+                    setSelectSartVerset(selectedItem)
+                    setCurrentSlide(index)
                 }}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                    return selectedItem
-                }}
-                rowTextForSelection={(item, index) => {
-                    return item
-                }}
+
+                buttonTextAfterSelection={(selectedItem, index) => selectedItem}
+                rowTextForSelection={(item, index) => item}
             />
+
             <SelectDropdown
                 buttonStyle={styles.selectAyah}
                 buttonTextStyle={styles.selectAyahText}
-                defaultValueByIndex={versets.length - 1 ?? 7}
+                defaultValue={versets.length}
+
                 disabled={isPlaying}
                 data={versets}
+
                 onSelect={(selectedItem, index) => {
-                    console.log(selectedItem)
-                    setSelectendVerset(selectedItem)
-                    // setLastVersetOfSelectedSurah(selectedItem.versets)
+                    setSelectEndVerset(selectedItem)
                 }}
+
                 buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem
                 }}
@@ -68,6 +75,7 @@ export default function SelectVerset(
                     return item
                 }}
             />
+           
         </View>
     )
 }

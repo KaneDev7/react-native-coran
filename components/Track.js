@@ -2,11 +2,23 @@ import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { windowWidth } from '../style'
 
-export default function Track() {
+export default function Track({selectEndVerset,currentSlide}) {
+
+  console.log(currentSlide, selectEndVerset)
+  const width = (currentSlide / selectEndVerset) * windowWidth
+  console.log('width', width ,'/', windowWidth)
+  const progressStyle = {
+    width:  width <= windowWidth  ? width  : windowWidth ,
+    height: 5,
+    backgroundColor: '#0d99ff',
+    position: 'absolute',
+    left: '0',
+    
+  }
     return (
         <View style={style.track} >
             <View style={style.progressBar} >
-                <View style={style.progress} >
+                <View style={progressStyle} >
                   <View style={style.progressDot}></View>
                 </View>
             </View>
@@ -28,14 +40,11 @@ const style = StyleSheet.create({
       width: windowWidth,
       height: 5,
       backgroundColor: '#e3eef6',
-      position: 'relative'
+      position: 'relative',
+      
     },
     progress: {
-      width: windowWidth / 3,
-      height: 5,
-      backgroundColor: '#0d99ff',
-      position: 'absolute',
-      left: '0',
+     
     },
     progressDot:{
       width: 10,

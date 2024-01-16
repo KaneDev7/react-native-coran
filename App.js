@@ -11,25 +11,27 @@ import { getCoranText } from './services/coranText';
 import Control from './components/Control';
 
 
-
 export default function App() {
   const [lastVersetOfSelectedSurah, setLastVersetOfSelectedSurah] = useState(0);
   const [firstVersetOfSelectedSurah, setFirstVersetOfSelectedSurah] = useState(0);
   const [startUrl, setStartUrl] = useState('')
   const [sound, setSound] = useState();
   const [surahNumber, setSurahNumber] = useState(1)
-  const [selectsartVerset, setSelectsartVerset] = useState(1)
-  const [selectendVerset, setSelectendVerset] = useState(7)
+  const [selectSartVerset, setSelectSartVerset] = useState(1)
+  const [selectEndVerset, setSelectEndVerset] = useState(7)
   const [startPlayVerset, setStartPlayVerset] = useState(1)
   const [endPlayVerset, setEndPlayVerset] = useState(7)
   const [coranText, setCorantText] = useState('')
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [isPlaying, setIsplaying] = useState(false)
+
+  const [currentSlide, setCurrentSlide] = useState(selectSartVerset)
 
   let currentVerset = startPlayVerset
 
 
   async function playSound(url) {
-    if(isPlaying){
+    if (isPlaying) {
       return setSound(null)
     }
     console.log('Loading Sound');
@@ -49,15 +51,20 @@ export default function App() {
   const onPlaybackStatusUpdate = (status) => {
     if (status.didJustFinish) {
       setSound(null);
+
+      setCurrentSlide(v =>  currentVerset >= endPlayVerset ? selectSartVerset : v + 1 )
+      
       if (currentVerset >= endPlayVerset) {
-        currentVerset = startPlayVerset - 1
+        currentVerset = startPlayVerset - 1 
       }
       currentVerset++
+      
+
       getCoranText(currentVerset).then(text => {
         console.log('text', text)
         setCorantText(text)
       })
-      console.log('currentVerset', currentVerset)
+
       playSound(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${currentVerset}.mp3`)
     }
   };
@@ -66,11 +73,11 @@ export default function App() {
 
   useEffect(() => {
     const startPlayVersetUpdate = convertSelectVerset({
-      surahNumber, selectedValue: selectsartVerset
+      surahNumber, selectedValue: selectSartVerset
     })
 
     const endPlayVersetUpdate = convertSelectVerset({
-      surahNumber, selectedValue: selectendVerset
+      surahNumber, selectedValue: selectEndVerset
     })
 
     console.log('hello')
@@ -78,7 +85,7 @@ export default function App() {
     setEndPlayVerset(endPlayVersetUpdate)
     setStartUrl(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${startPlayVersetUpdate}.mp3`)
 
-  }, [selectsartVerset, selectendVerset, surahNumber]);
+  }, [selectSartVerset, selectEndVerset, surahNumber]);
 
 
   useEffect(() => {
@@ -91,6 +98,7 @@ export default function App() {
   }, [sound]);
 
   return (
+
     <View style={styles.container}>
       <TextContainer coranText={coranText} />
       <SelectSurah
@@ -98,14 +106,22 @@ export default function App() {
         setFirstVersetOfSelectedSurah={setFirstVersetOfSelectedSurah}
         setLastVersetOfSelectedSurah={setLastVersetOfSelectedSurah}
         isPlaying={isPlaying}
+        setCurrentIndex={setCurrentIndex}
+        setCurrentSlide={setCurrentSlide}
       />
-      <Track />
+      <Track
+        selectEndVerset={selectEndVerset}
+        currentSlide={currentSlide}
+      />
       <SelectVerset
         firstVersetOfSelectedSurah={firstVersetOfSelectedSurah}
         lastVersetOfSelectedSurah={lastVersetOfSelectedSurah}
-        setSelectsartVerset={setSelectsartVerset}
-        setSelectendVerset={setSelectendVerset}
         isPlaying={isPlaying}
+        setSelectSartVerset={setSelectSartVerset}
+        setSelectEndVerset={setSelectEndVerset}
+        currentIndex={currentIndex}
+        setCurrentSlide={setCurrentSlide}
+
       />
 
       <View style={styles.container}>
@@ -114,6 +130,9 @@ export default function App() {
           startUrl={startUrl}
           isPlaying={isPlaying}
           setIsplaying={setIsplaying}
+          setCurrentSlide={setCurrentSlide}
+          selectSartVerset={selectSartVerset}
+
         />
         {/* <Button title="Play Sound" onPress={() => playSound(startUrl)} /> */}
       </View>
