@@ -1,6 +1,6 @@
 
 
-import React from 'react'
+import React, { useState } from 'react'
 
 import { View, StyleSheet } from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
@@ -14,40 +14,34 @@ export default function SelectSurah({
     setSurahNumber,
     setCurrentIndex,
     setCurrentSlide,
+    setIsplaying,
+    surahTextValue,
+    setSurahTextValue,
+    currentIndex,
     isPlaying
 }) {
+
+    console.log('surahTextValue', surahTextValue)
+   
     return (
         <View style={styles.surahContent} >
-            {/* <SelectDropdown
-                buttonStyle={styles.selectAyah}
-                buttonTextStyle={styles.selectAyahText}
-                defaultButtonText='Sourates'
-                data={sourates}
-                disabled={isPlaying}
-                onSelect={(selectedItem) => {
-                    console.log(selectedItem)
-                    setLastVersetOfSelectedSurah(selectedItem.versets)
-                    setFirstVersetOfSelectedSurah(0)
-                    setSurahNumber(selectedItem.numero)
-                }}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                    return selectedItem.nom
-                }}
-                rowTextForSelection={(item, index) => {
-                    return item.nom
-                }}
-            /> */}
             <RNPickerSelect
-                onValueChange={(value,index) => {
-                    setLastVersetOfSelectedSurah( sourates[index-1].versets)
+                onValueChange={(selectItem,index) => {
+                if(index === 0) return
+                    
+                    setLastVersetOfSelectedSurah(sourates[index-1].versets)
                     setFirstVersetOfSelectedSurah(0)
                     setSurahNumber(sourates[index-1].numero)
                     setCurrentIndex(index)
+                    setSurahTextValue(selectItem)
                     setCurrentSlide(1)
+                    setIsplaying(false)
                 }}
                 items={sourates.map(item =>{
                     return {  label : item.nom ,  value : item.nom } 
                 })}
+                 value={surahTextValue}
+
                style={pickerSelectStyles}
             />
         </View>

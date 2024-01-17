@@ -4,9 +4,8 @@ import { windowWidth } from '../style'
 
 export default function Track({selectEndVerset,currentSlide}) {
 
-  console.log(currentSlide, selectEndVerset)
-  const width = (currentSlide / selectEndVerset) * windowWidth
-  console.log('width', width ,'/', windowWidth)
+  let width = (currentSlide / selectEndVerset) * windowWidth
+
   const progressStyle = {
     width:  width <= windowWidth  ? width  : windowWidth ,
     height: 5,

@@ -1,11 +1,10 @@
 
 
 import React, { useEffect, useState } from 'react'
-
 import { View, StyleSheet } from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
-import RNPickerSelect from 'react-native-picker-select';
 import { sourates } from '../constants/sorats.list';
+import { AntDesign } from '@expo/vector-icons';
 
 
 
@@ -17,14 +16,13 @@ export default function SelectVerset(
         currentIndex,
         setCurrentSlide,
         isPlaying,
+        selectSartVerset,
+        selectEndVerset
+
     }) {
 
     const [versets, setVersets] = useState([])
-    const [lastDeffaultValue, setLastDeffaultValue] = useState()
 
-    const lastDeffaultValueFn = (value) =>{
-        return value
-    }
     useEffect(() => {
         const versetsArray = []
         let ration = 0
@@ -47,11 +45,15 @@ export default function SelectVerset(
                 defaultValue={versets ? versets.length - (sourates[currentIndex - 1]?.versets-1) : 1 }
                 disabled={isPlaying}
                 data={versets}
+                renderDropdownIcon={() =>{
+                    <AntDesign name="down" size={24} color="black" />
+                }}
+                dropdownIconPosition='right'
                 onSelect={(selectedItem, index) => {
                     setSelectSartVerset(selectedItem)
                     setCurrentSlide(index)
                 }}
-
+                defaultButtonText='Début'
                 buttonTextAfterSelection={(selectedItem, index) => selectedItem}
                 rowTextForSelection={(item, index) => item}
             />
@@ -60,10 +62,13 @@ export default function SelectVerset(
                 buttonStyle={styles.selectAyah}
                 buttonTextStyle={styles.selectAyahText}
                 defaultValue={versets.length}
-
+                defaultButtonText='Fin'
                 disabled={isPlaying}
                 data={versets}
-
+                renderDropdownIcon={() =>{
+                    <AntDesign name="down" size={24} color="black" />
+                }}
+                dropdownIconPosition='right' 
                 onSelect={(selectedItem, index) => {
                     setSelectEndVerset(selectedItem)
                 }}

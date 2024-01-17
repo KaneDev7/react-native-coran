@@ -9,6 +9,7 @@ import { Audio } from 'expo-av';
 import { convertSelectVerset } from './use-case/conversion';
 import { getCoranText } from './services/coranText';
 import Control from './components/Control';
+import { sourates } from './constants/sorats.list';
 
 
 export default function App() {
@@ -24,11 +25,12 @@ export default function App() {
   const [coranText, setCorantText] = useState('')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPlaying, setIsplaying] = useState(false)
-
   const [currentSlide, setCurrentSlide] = useState(selectSartVerset)
+  const [surahTextValue, setSurahTextValue] = useState(sourates[0].nom)
 
   let currentVerset = startPlayVerset
 
+  console.log('currentIndex',currentIndex)
 
   async function playSound(url) {
     if (isPlaying) {
@@ -52,13 +54,12 @@ export default function App() {
     if (status.didJustFinish) {
       setSound(null);
 
-      setCurrentSlide(v =>  currentVerset >= endPlayVerset ? selectSartVerset : v + 1 )
-      
+      setCurrentSlide(v => currentVerset >= endPlayVerset ? selectSartVerset : v + 1)
+
       if (currentVerset >= endPlayVerset) {
-        currentVerset = startPlayVerset - 1 
+        currentVerset = startPlayVerset - 1
       }
       currentVerset++
-      
 
       getCoranText(currentVerset).then(text => {
         console.log('text', text)
@@ -102,12 +103,18 @@ export default function App() {
     <View style={styles.container}>
       <TextContainer coranText={coranText} />
       <SelectSurah
-        setSurahNumber={setSurahNumber}
         setFirstVersetOfSelectedSurah={setFirstVersetOfSelectedSurah}
         setLastVersetOfSelectedSurah={setLastVersetOfSelectedSurah}
         isPlaying={isPlaying}
+        setSurahNumber={setSurahNumber}
         setCurrentIndex={setCurrentIndex}
         setCurrentSlide={setCurrentSlide}
+        setIsplaying={setIsplaying}
+        currentIndex={currentIndex}
+        setSurahTextValue={setSurahTextValue}
+        surahTextValue={surahTextValue}
+        setCorantText={setCorantText}
+
       />
       <Track
         selectEndVerset={selectEndVerset}
@@ -132,7 +139,11 @@ export default function App() {
           setIsplaying={setIsplaying}
           setCurrentSlide={setCurrentSlide}
           selectSartVerset={selectSartVerset}
-
+          setSurahNumber={setSurahNumber}
+          currentIndex={currentIndex}
+          setSound={setSound}
+          setSurahTextValue={setSurahTextValue}
+          setCorantText={setCorantText}
         />
         {/* <Button title="Play Sound" onPress={() => playSound(startUrl)} /> */}
       </View>
