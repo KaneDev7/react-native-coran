@@ -1,16 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, View } from 'react-native';
-import TextContainer from './components/TextContainer';
-import Track from './components/Track';
-import SelectSurah from './components/SelectSurah';
-import { useEffect, useState } from 'react';
-import SelectVerset from './components/SelectVerset';
+import { StyleSheet } from 'react-native';
+import { createContext, useEffect, useState } from 'react';
 import { Audio } from 'expo-av';
 import { convertSelectVerset } from './use-case/conversion';
 import { getCoranText } from './services/coranText';
-import Control from './components/Control';
 import { sourates } from './constants/sorats.list';
+import Home from './Home';
 
+
+export const GlobalContext = createContext()
 
 export default function App() {
   const [lastVersetOfSelectedSurah, setLastVersetOfSelectedSurah] = useState(0);
@@ -27,11 +24,12 @@ export default function App() {
   const [isPlaying, setIsplaying] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(selectSartVerset)
   const [surahTextValue, setSurahTextValue] = useState(sourates[0].nom)
+  const [rate, setRate] = useState(1)
+  const [soundStatus, setSounStatus] = useState()
 
   let currentVerset = startPlayVerset
 
-  console.log('currentIndex',currentIndex)
-
+  console.log('isPlaying', isPlaying)
   async function playSound(url) {
     if (isPlaying) {
       return setSound(null)
@@ -44,7 +42,7 @@ export default function App() {
       const { sound } = await Audio.Sound.createAsync(
         { uri: url },
         { shouldPlay: true },
-        onPlaybackStatusUpdate
+         onPlaybackStatusUpdate
       );
       setSound(sound);
     }
@@ -52,8 +50,8 @@ export default function App() {
 
   const onPlaybackStatusUpdate = (status) => {
     if (status.didJustFinish) {
+      console.log('status.didJustFinish', status.didJustFinish)
       setSound(null);
-
       setCurrentSlide(v => currentVerset >= endPlayVerset ? selectSartVerset : v + 1)
 
       if (currentVerset >= endPlayVerset) {
@@ -62,26 +60,21 @@ export default function App() {
       currentVerset++
 
       getCoranText(currentVerset).then(text => {
-        console.log('text', text)
         setCorantText(text)
       })
 
-      playSound(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${currentVerset}.mp3`)
+      if(isPlaying){
+        playSound(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${currentVerset}.mp3`)
+      }
+     
     }
   };
 
 
-
   useEffect(() => {
-    const startPlayVersetUpdate = convertSelectVerset({
-      surahNumber, selectedValue: selectSartVerset
-    })
+    const startPlayVersetUpdate = convertSelectVerset({surahNumber, selectedValue: selectSartVerset})
+    const endPlayVersetUpdate = convertSelectVerset({ surahNumber, selectedValue: selectEndVerset})
 
-    const endPlayVersetUpdate = convertSelectVerset({
-      surahNumber, selectedValue: selectEndVerset
-    })
-
-    console.log('hello')
     setStartPlayVerset(startPlayVersetUpdate)
     setEndPlayVerset(endPlayVersetUpdate)
     setStartUrl(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${startPlayVersetUpdate}.mp3`)
@@ -90,66 +83,41 @@ export default function App() {
 
 
   useEffect(() => {
-    return sound
-      ? () => {
+    return sound ? () => {
         console.log('Unloading Sound');
         sound.unloadAsync();
-      }
-      : undefined;
+      }: undefined;
   }, [sound]);
 
   return (
-
-    <View style={styles.container}>
-      <TextContainer coranText={coranText} />
-      <SelectSurah
-        setFirstVersetOfSelectedSurah={setFirstVersetOfSelectedSurah}
-        setLastVersetOfSelectedSurah={setLastVersetOfSelectedSurah}
-        isPlaying={isPlaying}
-        setSurahNumber={setSurahNumber}
-        setCurrentIndex={setCurrentIndex}
-        setCurrentSlide={setCurrentSlide}
-        setIsplaying={setIsplaying}
-        currentIndex={currentIndex}
-        setSurahTextValue={setSurahTextValue}
-        surahTextValue={surahTextValue}
-        setCorantText={setCorantText}
-
-      />
-      <Track
-        selectEndVerset={selectEndVerset}
-        currentSlide={currentSlide}
-      />
-      <SelectVerset
-        firstVersetOfSelectedSurah={firstVersetOfSelectedSurah}
-        lastVersetOfSelectedSurah={lastVersetOfSelectedSurah}
-        isPlaying={isPlaying}
-        setSelectSartVerset={setSelectSartVerset}
-        setSelectEndVerset={setSelectEndVerset}
-        currentIndex={currentIndex}
-        setCurrentSlide={setCurrentSlide}
-
-      />
-
-      <View style={styles.container}>
-        <Control
-          playSound={playSound}
-          startUrl={startUrl}
-          isPlaying={isPlaying}
-          setIsplaying={setIsplaying}
-          setCurrentSlide={setCurrentSlide}
-          selectSartVerset={selectSartVerset}
-          setSurahNumber={setSurahNumber}
-          currentIndex={currentIndex}
-          setSound={setSound}
-          setSurahTextValue={setSurahTextValue}
-          setCorantText={setCorantText}
-        />
-        {/* <Button title="Play Sound" onPress={() => playSound(startUrl)} /> */}
-      </View>
-
-      <StatusBar style="auto" />
-    </View>
+  <GlobalContext.Provider value={{
+    setFirstVersetOfSelectedSurah,
+    setLastVersetOfSelectedSurah,
+    setSurahNumber,
+    setCurrentIndex,
+    setCurrentSlide,
+    setIsplaying,
+    setSurahTextValue,
+    setCorantText,
+    setSelectSartVerset,
+    setSelectEndVerset,
+    playSound,
+    setSound,
+    setRate,
+    rate,
+    coranText,
+    startUrl,
+    isPlaying,
+    currentIndex,
+    currentSlide,
+    surahTextValue,
+    selectSartVerset,
+    selectEndVerset,
+    firstVersetOfSelectedSurah,
+    lastVersetOfSelectedSurah
+  }}>
+    <Home/>
+  </GlobalContext.Provider>
   );
 }
 

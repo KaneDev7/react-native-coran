@@ -1,32 +1,37 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { windowWidth } from '../style'
 import { primary } from '../style/variables';
 import { sourates } from '../constants/sorats.list';
+import { GlobalContext } from '../App';
 
 const iconSize = 60
 
-export default function Control({
-  playSound, 
-  startUrl, 
-  isPlaying, 
-  setIsplaying,
-  setCurrentSlide,
-  selectSartVerset,
-  setSurahNumber,
-  currentIndex,
-  setSound,
-  setSurahTextValue,
-  setCorantText
-}) {
-  toggleIcon = !isPlaying ? 'play-circle' : 'stop-circle'
+export default function Control() {
 
+  const {
+    playSound,
+    startUrl,
+    isPlaying,
+    setIsplaying,
+    setCurrentSlide,           
+    selectSartVerset,
+    setSurahNumber,
+    currentIndex,
+    setSound,
+    setSurahTextValue,
+    setCorantText
+  } = useContext(GlobalContext)
+
+
+  toggleIcon = !isPlaying ? 'play-circle' : 'stop-circle'
 
   const handlepress = () => {
     setIsplaying(!isPlaying)
     if(isPlaying){
       setCurrentSlide(selectSartVerset)
+      setSound(null)
     }
     playSound(startUrl)
   }
@@ -56,7 +61,7 @@ export default function Control({
     <View style={style.controlConatiner} >
       <Ionicons onPress={handlePrev} name={'play-skip-back-circle'} size={iconSize} color={primary} />
       <Ionicons onPress={handlepress} name={toggleIcon} size={iconSize} color={primary} />
-      <Ionicons  onPress={handleNext}  name={'play-skip-forward-circle'} size={iconSize} color={primary} />
+      <Ionicons onPress={handleNext} name={'play-skip-forward-circle'} size={iconSize} color={primary} />
     </View>
   )
 }

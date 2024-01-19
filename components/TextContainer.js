@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { windowWidth } from '../style'
+import { GlobalContext } from '../App'
 
-export default function TextContainer({ coranText }) {
-  console.log('coranText', coranText)
+export default function TextContainer() {
+  const { coranText } = useContext(GlobalContext)
+  
   return (
     <ScrollView style={style.textContainer} >
       <Text style={style.text}> {coranText} </Text>

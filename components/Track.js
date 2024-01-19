@@ -1,13 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { windowWidth } from '../style'
+import { GlobalContext } from '../App'
 
-export default function Track({selectEndVerset,currentSlide}) {
+export default function Track() {
 
-  let width = (currentSlide / selectEndVerset) * windowWidth
+  const {selectEndVerset,currentSlide} = useContext(GlobalContext)
+  
+   let width = (currentSlide / selectEndVerset) * windowWidth
+
+
+   console.log('width',width)
+   console.log('currentSlide',currentSlide)
+   console.log('selectEndVerset',selectEndVerset)
+
 
   const progressStyle = {
     width:  width <= windowWidth  ? width  : windowWidth ,
+    // width : width,
     height: 5,
     backgroundColor: '#0d99ff',
     position: 'absolute',

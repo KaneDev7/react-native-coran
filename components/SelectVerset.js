@@ -1,25 +1,23 @@
 
 
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
 import { sourates } from '../constants/sorats.list';
 import { AntDesign } from '@expo/vector-icons';
+import { GlobalContext } from '../App';
 
 
+export default function SelectVerset() {
 
-export default function SelectVerset(
-    {
+    const {
         lastVersetOfSelectedSurah,
         setSelectSartVerset,
         setSelectEndVerset,
         currentIndex,
         setCurrentSlide,
         isPlaying,
-        selectSartVerset,
-        selectEndVerset
-
-    }) {
+    } = useContext(GlobalContext)
 
     const [versets, setVersets] = useState([])
 
@@ -28,24 +26,24 @@ export default function SelectVerset(
         let ration = 0
         for (let index = 1; index <= lastVersetOfSelectedSurah; index++) {
             versetsArray.push(index)
-            ration+=index
+            ration += index
         }
-        console.log('ration',ration)
+        console.log('ration', ration)
         setVersets(versetsArray)
         setSelectSartVerset(1)
         setSelectEndVerset(versetsArray.length)
-        
+
     }, [lastVersetOfSelectedSurah])
- 
+
     return (
         <View style={styles.selectAyahContent} >
             <SelectDropdown
                 buttonStyle={styles.selectAyah}
                 buttonTextStyle={styles.selectAyahText}
-                defaultValue={versets ? versets.length - (sourates[currentIndex - 1]?.versets-1) : 1 }
+                defaultValue={versets ? versets.length - (sourates[currentIndex - 1]?.versets - 1) : 1}
                 disabled={isPlaying}
                 data={versets}
-                renderDropdownIcon={() =>{
+                renderDropdownIcon={() => {
                     <AntDesign name="down" size={24} color="black" />
                 }}
                 dropdownIconPosition='right'
@@ -65,10 +63,10 @@ export default function SelectVerset(
                 defaultButtonText='Fin'
                 disabled={isPlaying}
                 data={versets}
-                renderDropdownIcon={() =>{
+                renderDropdownIcon={() => {
                     <AntDesign name="down" size={24} color="black" />
                 }}
-                dropdownIconPosition='right' 
+                dropdownIconPosition='right'
                 onSelect={(selectedItem, index) => {
                     setSelectEndVerset(selectedItem)
                 }}
@@ -80,7 +78,7 @@ export default function SelectVerset(
                     return item
                 }}
             />
-           
+
         </View>
     )
 }

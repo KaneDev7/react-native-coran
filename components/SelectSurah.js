@@ -1,14 +1,17 @@
 
 
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import { View, StyleSheet } from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
 import RNPickerSelect from 'react-native-picker-select';
 import { sourates } from '../constants/sorats.list';
+import { GlobalContext } from '../App';
 
 
-export default function SelectSurah({
+export default function SelectSurah() {
+
+const {
     setFirstVersetOfSelectedSurah,
     setLastVersetOfSelectedSurah,
     setSurahNumber,
@@ -17,9 +20,8 @@ export default function SelectSurah({
     setIsplaying,
     surahTextValue,
     setSurahTextValue,
-    currentIndex,
     isPlaying
-}) {
+} = useContext(GlobalContext)
 
     console.log('surahTextValue', surahTextValue)
    
@@ -41,6 +43,7 @@ export default function SelectSurah({
                     return {  label : item.nom ,  value : item.nom } 
                 })}
                  value={surahTextValue}
+                 disabled={isPlaying}
 
                style={pickerSelectStyles}
             />
