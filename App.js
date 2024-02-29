@@ -22,58 +22,59 @@ export default function App() {
   const [coranText, setCorantText] = useState('')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPlaying, setIsplaying] = useState(false)
+  const [isFirstStart, setIsFirstStart] = useState(true)
   const [currentSlide, setCurrentSlide] = useState(selectSartVerset)
   const [surahTextValue, setSurahTextValue] = useState(sourates[0].nom)
   const [rate, setRate] = useState(1)
-  const [soundStatus, setSounStatus] = useState()
 
   let currentVerset = startPlayVerset
 
   console.log('isPlaying', isPlaying)
+
   async function playSound(url) {
-    if (isPlaying) {
-      return setSound(null)
-    }
-    console.log('Loading Sound');
+     if(!isPlaying && !isFirstStart) {
+      setSound(null)
+      return
+     }
+
     getCoranText(currentVerset).then(text => {
       setCorantText(text)
     })
+
     if (url) {
       const { sound } = await Audio.Sound.createAsync(
         { uri: url },
         { shouldPlay: true },
-         onPlaybackStatusUpdate
+        onPlaybackStatusUpdate,
+      
       );
       setSound(sound);
+
     }
-  }
+  } 
 
   const onPlaybackStatusUpdate = (status) => {
-    if (status.didJustFinish) {
-      console.log('status.didJustFinish', status.didJustFinish)
-      setSound(null);
-      setCurrentSlide(v => currentVerset >= endPlayVerset ? selectSartVerset : v + 1)
+      if (status.didJustFinish) {
+        setSound(null);
+        setCurrentSlide(v => currentVerset >= endPlayVerset ? selectSartVerset : v + 1)
 
-      if (currentVerset >= endPlayVerset) {
-        currentVerset = startPlayVerset - 1
-      }
-      currentVerset++
+        if (currentVerset >= endPlayVerset) {
+          currentVerset = startPlayVerset - 1
+        }
+        currentVerset++
 
-      getCoranText(currentVerset).then(text => {
-        setCorantText(text)
-      })
-
-      if(isPlaying){
+        getCoranText(currentVerset).then(text => {
+          setCorantText(text)
+        })
         playSound(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${currentVerset}.mp3`)
       }
-     
-    }
+
   };
 
 
   useEffect(() => {
-    const startPlayVersetUpdate = convertSelectVerset({surahNumber, selectedValue: selectSartVerset})
-    const endPlayVersetUpdate = convertSelectVerset({ surahNumber, selectedValue: selectEndVerset})
+    const startPlayVersetUpdate = convertSelectVerset({ surahNumber, selectedValue: selectSartVerset })
+    const endPlayVersetUpdate = convertSelectVerset({ surahNumber, selectedValue: selectEndVerset })
 
     setStartPlayVerset(startPlayVersetUpdate)
     setEndPlayVerset(endPlayVersetUpdate)
@@ -84,40 +85,42 @@ export default function App() {
 
   useEffect(() => {
     return sound ? () => {
-        console.log('Unloading Sound');
-        sound.unloadAsync();
-      }: undefined;
+      console.log('Unloading Sound');
+      sound.unloadAsync();
+    } : undefined;
   }, [sound]);
 
   return (
-  <GlobalContext.Provider value={{
-    setFirstVersetOfSelectedSurah,
-    setLastVersetOfSelectedSurah,
-    setSurahNumber,
-    setCurrentIndex,
-    setCurrentSlide,
-    setIsplaying,
-    setSurahTextValue,
-    setCorantText,
-    setSelectSartVerset,
-    setSelectEndVerset,
-    playSound,
-    setSound,
-    setRate,
-    rate,
-    coranText,
-    startUrl,
-    isPlaying,
-    currentIndex,
-    currentSlide,
-    surahTextValue,
-    selectSartVerset,
-    selectEndVerset,
-    firstVersetOfSelectedSurah,
-    lastVersetOfSelectedSurah
-  }}>
-    <Home/>
-  </GlobalContext.Provider>
+    <GlobalContext.Provider value={{
+      setFirstVersetOfSelectedSurah,
+      setLastVersetOfSelectedSurah,
+      setSurahNumber,
+      setCurrentIndex,
+      setCurrentSlide,
+      setIsplaying,
+      setIsFirstStart,
+      setSurahTextValue,
+      setCorantText,
+      setSelectSartVerset,
+      setSelectEndVerset,
+      playSound,
+      setSound,
+      setRate,
+      rate,
+      coranText,
+      startUrl,
+      isPlaying,
+      isFirstStart,
+      currentIndex,
+      currentSlide,
+      surahTextValue,
+      selectSartVerset,
+      selectEndVerset,
+      firstVersetOfSelectedSurah,
+      lastVersetOfSelectedSurah
+    }}>
+      <Home />
+    </GlobalContext.Provider>
   );
 }
 

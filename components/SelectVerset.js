@@ -6,6 +6,7 @@ import SelectDropdown from 'react-native-select-dropdown'
 import { sourates } from '../constants/sorats.list';
 import { AntDesign } from '@expo/vector-icons';
 import { GlobalContext } from '../App';
+import { primary, secondary, secondary2, secondary3 } from '../style/variables';
 
 
 export default function SelectVerset() {
@@ -28,7 +29,6 @@ export default function SelectVerset() {
             versetsArray.push(index)
             ration += index
         }
-        console.log('ration', ration)
         setVersets(versetsArray)
         setSelectSartVerset(1)
         setSelectEndVerset(versetsArray.length)
@@ -51,7 +51,7 @@ export default function SelectVerset() {
                     setSelectSartVerset(selectedItem)
                     setCurrentSlide(index)
                 }}
-                defaultButtonText='Début'
+                defaultButtonText={1}
                 buttonTextAfterSelection={(selectedItem, index) => selectedItem}
                 rowTextForSelection={(item, index) => item}
             />
@@ -60,7 +60,7 @@ export default function SelectVerset() {
                 buttonStyle={styles.selectAyah}
                 buttonTextStyle={styles.selectAyahText}
                 defaultValue={versets.length}
-                defaultButtonText='Fin'
+                defaultButtonText={1}
                 disabled={isPlaying}
                 data={versets}
                 renderDropdownIcon={() => {
@@ -91,8 +91,14 @@ const styles = StyleSheet.create({
         marginVertical: 10
     },
     selectAyah: {
-        width: 100,
-        padding: 5
+        width: 60,
+        height:60,
+        fontSize : 10,
+        borderRadius : '50%',
+        backgroundColor : secondary3,
+        borderWidth: 1,
+        borderColor: secondary,
+        color : 'white'
     },
     selectAyahText: {
         fontSize: 15

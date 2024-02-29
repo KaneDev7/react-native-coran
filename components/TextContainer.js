@@ -2,10 +2,11 @@ import React, { useContext } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { windowWidth } from '../style'
 import { GlobalContext } from '../App'
+import { primary, secondary, secondary2, secondary3 } from '../style/variables'
 
 export default function TextContainer() {
   const { coranText } = useContext(GlobalContext)
-  
+   
   return (
     <ScrollView style={style.textContainer} >
       <Text style={style.text}> {coranText} </Text>
@@ -18,18 +19,19 @@ const style = StyleSheet.create({
   textContainer: {
     width: windowWidth,
     height: windowWidth - 100,
-    backgroundColor: '#f8f8f6',
-    borderWidth: 2,
-    borderColor: '#ddd',
+    backgroundColor: secondary3,
+    borderWidth: 3,
+    borderColor: secondary2,
     textAlign: 'center',
     marginTop: 50,
     paddingHorizontal: 10, 
     borderRadius: 10
   },
   text: {
-    fontSize: 25,
+    fontSize: 24,
     lineHeight: 50,
     textAlign: 'center',
+    color : primary,
     paddingVertical :( windowWidth - 100) / 2,
 
   },

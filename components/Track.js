@@ -2,28 +2,21 @@ import React, { useContext } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { windowWidth } from '../style'
 import { GlobalContext } from '../App'
+import { primary, secondary } from '../style/variables'
 
 export default function Track() {
 
   const {selectEndVerset,currentSlide} = useContext(GlobalContext)
-  
    let width = (currentSlide / selectEndVerset) * windowWidth
 
-
-   console.log('width',width)
-   console.log('currentSlide',currentSlide)
-   console.log('selectEndVerset',selectEndVerset)
-
-
   const progressStyle = {
-    width:  width <= windowWidth  ? width  : windowWidth ,
-    // width : width,
+    width:  width <= windowWidth ? width  : windowWidth ,
     height: 5,
-    backgroundColor: '#0d99ff',
+    backgroundColor: secondary,
     position: 'absolute',
     left: '0',
-    
   }
+
     return (
         <View style={style.track} >
             <View style={style.progressBar} >
@@ -32,8 +25,8 @@ export default function Track() {
                 </View>
             </View>
             <View style={style.trackTime}>
-                <Text>0:00</Text>
-                <Text>03:20</Text>
+                <Text> {currentSlide} </Text>
+                <Text> {selectEndVerset} </Text>
             </View>
         </View>
     )
@@ -50,7 +43,6 @@ const style = StyleSheet.create({
       height: 5,
       backgroundColor: '#e3eef6',
       position: 'relative',
-      
     },
     progress: {
      
@@ -58,7 +50,7 @@ const style = StyleSheet.create({
     progressDot:{
       width: 10,
       height: 10,
-      backgroundColor: '#0d99ff',
+      backgroundColor: secondary,
       borderRadius: 100,
       position: 'absolute',
       zIndex: 2,

@@ -1,12 +1,14 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { windowWidth } from '../style'
 import { primary } from '../style/variables';
 import { sourates } from '../constants/sorats.list';
 import { GlobalContext } from '../App';
 
-const iconSize = 60
+
+const iconSize = 62
 
 export default function Control() {
 
@@ -15,31 +17,34 @@ export default function Control() {
     startUrl,
     isPlaying,
     setIsplaying,
-    setCurrentSlide,           
+    setCurrentSlide,
     selectSartVerset,
     setSurahNumber,
     currentIndex,
     setSound,
+    setIsFirstStart,
     setSurahTextValue,
     setCorantText
   } = useContext(GlobalContext)
 
-
-  toggleIcon = !isPlaying ? 'play-circle' : 'stop-circle'
+  const [playPauseIcon, setPlayPauseIcon] = useState('play')
 
   const handlepress = () => {
-    setIsplaying(!isPlaying)
-    if(isPlaying){
-      setCurrentSlide(selectSartVerset)
-      setSound(null)
+    let toggleIcon = !isPlaying ? 'pausecircle' : 'play'
+    setIsFirstStart(true)
+    setIsplaying(v => !v)
+    setPlayPauseIcon(toggleIcon)
+    setCurrentSlide(selectSartVerset)
+    setSound(null)
+    if (!isPlaying) {
+      playSound(startUrl)
     }
-    playSound(startUrl)
   }
 
   const handleNext = () => {
-    console.log('next')
     setSound(null)
-    setIsplaying(false)
+    setIsplaying(true)
+    setPlayPauseIcon('play')
     setCurrentSlide(selectSartVerset)
     setSurahNumber(sourates[currentIndex].numero)
     setSurahTextValue(sourates[currentIndex].nom)
@@ -47,21 +52,20 @@ export default function Control() {
   }
 
   const handlePrev = () => {
-    console.log('prev')
     setSound(null)
     setIsplaying(false)
+    setPlayPauseIcon('play')
     setCurrentSlide(selectSartVerset)
     setSurahNumber(sourates[currentIndex - 2].numero)
     setSurahTextValue(sourates[currentIndex - 2].nom)
     setCorantText('')
-
   }
 
   return (
     <View style={style.controlConatiner} >
-      <Ionicons onPress={handlePrev} name={'play-skip-back-circle'} size={iconSize} color={primary} />
-      <Ionicons onPress={handlepress} name={toggleIcon} size={iconSize} color={primary} />
-      <Ionicons onPress={handleNext} name={'play-skip-forward-circle'} size={iconSize} color={primary} />
+      <AntDesign onPress={handlePrev} name={'banckward'} size={45} color={primary} />
+      <AntDesign onPress={handlepress} name={playPauseIcon} size={iconSize} color={primary} />
+      <AntDesign onPress={handleNext} name={'forward'} size={45} color={primary} />
     </View>
   )
 }
@@ -73,7 +77,8 @@ const style = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 10,
+    alignItems : 'center',
+    gap: 50,
     marginVertical: 20
   }
 })

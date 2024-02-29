@@ -6,7 +6,7 @@ export async function getCoranText(n) {
         .then((result) => result.json())
         .then((data) => {
             text = data.data.text
-            console.log()
+
         });
     } catch (error) {
         
