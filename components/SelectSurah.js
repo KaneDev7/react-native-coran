@@ -18,7 +18,7 @@ export default function SelectSurah() {
         surahTextValue,
         setSurahTextValue,
         isPlaying
-    } = useContext(GlobalContext)
+    } = useContext(GlobalContext) 
 
 
     return (

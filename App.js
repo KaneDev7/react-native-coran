@@ -4,10 +4,15 @@ import { Audio } from 'expo-av';
 import { convertSelectVerset } from './use-case/conversion';
 import { getCoranText } from './services/coranText';
 import { sourates } from './constants/sorats.list';
-import Home from './Home';
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Player from './pages/Player';
+import Sourates from './pages/Sourates';
 
 
 export const GlobalContext = createContext()
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [lastVersetOfSelectedSurah, setLastVersetOfSelectedSurah] = useState(0);
@@ -29,10 +34,9 @@ export default function App() {
 
   let currentVerset = startPlayVerset
 
-  console.log('isPlaying', isPlaying)
 
   async function playSound(url) {
-     if(!isPlaying && !isFirstStart) {
+    if(!isPlaying && !isFirstStart) {
       setSound(null)
       return
      }
@@ -46,31 +50,32 @@ export default function App() {
         { uri: url },
         { shouldPlay: true },
         onPlaybackStatusUpdate,
-      
+
       );
       setSound(sound);
 
     }
-  } 
+  }
 
   const onPlaybackStatusUpdate = (status) => {
-      if (status.didJustFinish) {
-        setSound(null);
-        setCurrentSlide(v => currentVerset >= endPlayVerset ? selectSartVerset : v + 1)
+    if (status.didJustFinish) {
+      setSound(null);
+      setCurrentSlide(v => currentVerset >= endPlayVerset ? selectSartVerset : v + 1)
 
-        if (currentVerset >= endPlayVerset) {
-          currentVerset = startPlayVerset - 1
-        }
-        currentVerset++
-
-        getCoranText(currentVerset).then(text => {
-          setCorantText(text)
-        })
-        playSound(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${currentVerset}.mp3`)
+      if (currentVerset >= endPlayVerset) {
+        currentVerset = startPlayVerset - 1
       }
+      currentVerset++
+
+      getCoranText(currentVerset).then(text => {
+        setCorantText(text)
+      })
+      playSound(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${currentVerset}.mp3`)
+    }
 
   };
 
+ 
 
   useEffect(() => {
     const startPlayVersetUpdate = convertSelectVerset({ surahNumber, selectedValue: selectSartVerset })
@@ -119,7 +124,12 @@ export default function App() {
       firstVersetOfSelectedSurah,
       lastVersetOfSelectedSurah
     }}>
-      <Home />
+      <NavigationContainer>
+        <Stack.Navigator>
+        <Stack.Screen name="Sourates" component={Sourates} />
+          <Stack.Screen name="Lecture" component={Player} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </GlobalContext.Provider>
   );
 }

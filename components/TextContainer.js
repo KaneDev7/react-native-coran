@@ -1,15 +1,33 @@
-import React, { useContext } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import React, { useCallback, useContext } from 'react'
+import { Text, StyleSheet, ScrollView } from 'react-native'
 import { windowWidth } from '../style'
 import { GlobalContext } from '../App'
-import { primary, secondary, secondary2, secondary3 } from '../style/variables'
+import { primary, secondary2, secondary3 } from '../style/variables'
+import { useFonts } from 'expo-font';
+// import * as SplashScreen from 'expo-splash-screen';
+
+// SplashScreen.preventAutoHideAsync();
 
 export default function TextContainer() {
   const { coranText } = useContext(GlobalContext)
-   
+
+  const [fontsLoaded, fontError] = useFonts({
+    'Amiri-Quran': require('../assets/fonts/Amiri-Quran.ttf'),
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded || fontError) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   return (
-    <ScrollView style={style.textContainer} >
-      <Text style={style.text}> {coranText} </Text>
+    <ScrollView style={style.textContainer} onLayout={onLayoutRootView}>
+      <Text style={{fontFamily: 'Amiri-Quran' ,...style.text} }> {coranText} </Text>
     </ScrollView>
   )
 }
@@ -28,8 +46,8 @@ const style = StyleSheet.create({
     borderRadius: 10
   },
   text: {
-    fontSize: 24,
-    lineHeight: 50,
+    fontSize: 30,
+    lineHeight: 60,
     textAlign: 'center',
     color : primary,
     paddingVertical :( windowWidth - 100) / 2,

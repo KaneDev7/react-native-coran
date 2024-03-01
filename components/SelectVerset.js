@@ -6,7 +6,7 @@ import SelectDropdown from 'react-native-select-dropdown'
 import { sourates } from '../constants/sorats.list';
 import { AntDesign } from '@expo/vector-icons';
 import { GlobalContext } from '../App';
-import { primary, secondary, secondary2, secondary3 } from '../style/variables';
+import { secondary, secondary3 } from '../style/variables';
 
 
 export default function SelectVerset() {
@@ -91,8 +91,8 @@ const styles = StyleSheet.create({
         marginVertical: 10
     },
     selectAyah: {
-        width: 60,
-        height:60,
+        width: 65,
+        height:50,
         fontSize : 10,
         borderRadius : '50%',
         backgroundColor : secondary3,
