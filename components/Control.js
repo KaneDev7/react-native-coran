@@ -8,7 +8,7 @@ import { sourates } from '../constants/sorats.list';
 import { GlobalContext } from '../App';
 
 
-const iconSize = 40
+const iconSize = 30
 
 export default function Control() {
 
@@ -65,9 +65,9 @@ export default function Control() {
 
   return (
     <View style={{pointerEvents : 'auto', opacity :'1', ...style.controlConatiner}} >
-      <FontAwesome5 onPress={handlePrev} name={'backward'} size={45} color={primary} />
+      <FontAwesome5 onPress={handlePrev} name={'backward'} size={30} color={primary} />
       <FontAwesome5 onPress={handlepress} name={playPauseIcon} size={iconSize} color={primary} />
-      <FontAwesome5 onPress={handleNext} name={'forward'} size={45} color={primary} />
+      <FontAwesome5 onPress={handleNext} name={'forward'} size={30} color={primary} />
     </View>
   )
 }

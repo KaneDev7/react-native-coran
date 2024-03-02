@@ -41,12 +41,12 @@ const style = StyleSheet.create({
     borderWidth: 3,
     borderColor: secondary2,
     textAlign: 'center',
-    marginTop: 50,
+    marginTop: 20,
     paddingHorizontal: 10, 
     borderRadius: 10
   },
   text: {
-    fontSize: 30,
+    fontSize: 25,
     lineHeight: 60,
     textAlign: 'center',
     color : primary,

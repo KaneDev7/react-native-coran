@@ -6,13 +6,18 @@ import { getCoranText } from './services/coranText';
 import { sourates } from './constants/sorats.list';
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import Player from './pages/Player';
 import Sourates from './pages/Sourates';
+import Reciteurs from './pages/Reciteurs';
 
 
 export const GlobalContext = createContext()
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
 
 export default function App() {
   const [lastVersetOfSelectedSurah, setLastVersetOfSelectedSurah] = useState(0);
@@ -36,10 +41,10 @@ export default function App() {
 
 
   async function playSound(url) {
-    if(!isPlaying && !isFirstStart) {
+    if (!isPlaying && !isFirstStart) {
       setSound(null)
       return
-     }
+    }
 
     getCoranText(currentVerset).then(text => {
       setCorantText(text)
@@ -70,12 +75,12 @@ export default function App() {
       getCoranText(currentVerset).then(text => {
         setCorantText(text)
       })
-      playSound(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${currentVerset}.mp3`)
+      playSound(`https://cdn.islamic.network/quran/audio/64/ar.minshawimujawwad/${currentVerset}.mp3`)
     }
 
   };
 
- 
+
 
   useEffect(() => {
     const startPlayVersetUpdate = convertSelectVerset({ surahNumber, selectedValue: selectSartVerset })
@@ -83,7 +88,7 @@ export default function App() {
 
     setStartPlayVerset(startPlayVersetUpdate)
     setEndPlayVerset(endPlayVersetUpdate)
-    setStartUrl(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${startPlayVersetUpdate}.mp3`)
+    setStartUrl(`https://cdn.islamic.network/quran/audio/64/ar.minshawimujawwad/${startPlayVersetUpdate}.mp3`)
 
   }, [selectSartVerset, selectEndVerset, surahNumber]);
 
@@ -125,10 +130,11 @@ export default function App() {
       lastVersetOfSelectedSurah
     }}>
       <NavigationContainer>
-        <Stack.Navigator>
-        <Stack.Screen name="Sourates" component={Sourates} />
-          <Stack.Screen name="Lecture" component={Player} />
-        </Stack.Navigator>
+        <Tab.Navigator>
+          <Tab.Screen name="Sourates" component={Sourates} />
+          <Tab.Screen name="Lecture" component={Player} />
+          <Tab.Screen name="Reciteurs" component={Reciteurs} />
+        </Tab.Navigator>
       </NavigationContainer>
     </GlobalContext.Provider>
   );

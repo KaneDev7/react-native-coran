@@ -20,20 +20,18 @@ export default function Player({ route }) {
         setSurahTextValue,
         setCorantText
     } = useContext(GlobalContext)
-    
-    const { sourateIndex } = route.params;
 
-    console.log('param', route.params)
 
+    const index =  route?.params?.sourateIndex || 1
     useEffect(() => {
         setSound(null)
         setIsplaying(false)
         setCurrentSlide(selectSartVerset)
-        setCurrentIndex(sourateIndex)
-        setSurahNumber(sourates[sourateIndex].numero)
-        setSurahTextValue(sourates[sourateIndex].nom)
+        setCurrentIndex(index)
+        setSurahNumber(sourates[index].numero)
+        setSurahTextValue(sourates[index].nom)
         setCorantText('')
-    }, [sourateIndex])
+    }, [index])
 
     return (
         <View style={styles.container}>

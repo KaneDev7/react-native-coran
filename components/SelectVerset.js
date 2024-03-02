@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: "row",
         gap: 20,
-        marginVertical: 10
+        marginVertical: 3
     },
     selectAyah: {
         width: 65,

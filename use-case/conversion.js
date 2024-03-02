@@ -11,6 +11,3 @@ export function convertSelectVerset({surahNumber, selectedValue}) {
     }
     return total + selectedValue
   }
-
-
-  
