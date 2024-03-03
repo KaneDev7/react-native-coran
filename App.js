@@ -7,16 +7,19 @@ import { sourates } from './constants/sorats.list';
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 
 import Player from './pages/Player';
 import Sourates from './pages/Sourates';
 import Reciteurs from './pages/Reciteurs';
+import { primary, secondary} from './style/variables';
 
 
 export const GlobalContext = createContext()
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
 
 
 export default function App() {
@@ -32,13 +35,16 @@ export default function App() {
   const [coranText, setCorantText] = useState('')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPlaying, setIsplaying] = useState(false)
+  const [playPauseIcon, setPlayPauseIcon] = useState('play')
   const [isFirstStart, setIsFirstStart] = useState(true)
   const [currentSlide, setCurrentSlide] = useState(selectSartVerset)
   const [surahTextValue, setSurahTextValue] = useState(sourates[0].nom)
+  const [reciter, setReciter] = useState('aymanswoaid')
   const [rate, setRate] = useState(1)
 
   let currentVerset = startPlayVerset
 
+  console.log('reciter', reciter)
 
   async function playSound(url) {
     if (!isPlaying && !isFirstStart) {
@@ -75,7 +81,7 @@ export default function App() {
       getCoranText(currentVerset).then(text => {
         setCorantText(text)
       })
-      playSound(`https://cdn.islamic.network/quran/audio/64/ar.minshawimujawwad/${currentVerset}.mp3`)
+      playSound(`https://cdn.islamic.network/quran/audio/64/ar.${reciter}/${currentVerset}.mp3`)
     }
 
   };
@@ -88,9 +94,9 @@ export default function App() {
 
     setStartPlayVerset(startPlayVersetUpdate)
     setEndPlayVerset(endPlayVersetUpdate)
-    setStartUrl(`https://cdn.islamic.network/quran/audio/64/ar.minshawimujawwad/${startPlayVersetUpdate}.mp3`)
+    setStartUrl(`https://cdn.islamic.network/quran/audio/64/ar.${reciter}/${startPlayVersetUpdate}.mp3`)
 
-  }, [selectSartVerset, selectEndVerset, surahNumber]);
+  }, [selectSartVerset, selectEndVerset, surahNumber, reciter]);
 
 
   useEffect(() => {
@@ -108,6 +114,7 @@ export default function App() {
       setCurrentIndex,
       setCurrentSlide,
       setIsplaying,
+      setPlayPauseIcon,
       setIsFirstStart,
       setSurahTextValue,
       setCorantText,
@@ -116,10 +123,13 @@ export default function App() {
       playSound,
       setSound,
       setRate,
+      setReciter,
       rate,
+      reciter,
       coranText,
       startUrl,
       isPlaying,
+      playPauseIcon,
       isFirstStart,
       currentIndex,
       currentSlide,
@@ -130,11 +140,45 @@ export default function App() {
       lastVersetOfSelectedSurah
     }}>
       <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name="Sourates" component={Sourates} />
-          <Tab.Screen name="Lecture" component={Player} />
-          <Tab.Screen name="Reciteurs" component={Reciteurs} />
-        </Tab.Navigator>
+        <Stack.Navigator
+          screenOptions={({ route }) => ({
+            // tabBarIcon: ({ focused }) => {
+            //   let iconName;
+            //   if (route.name === 'Sourates') {
+            //     iconName = focused
+            //       ? 'list'
+            //       : 'list-outline';
+            //   } else if (route.name === 'Lecture') {
+            //     iconName = focused ?
+            //       'play-circle' :
+            //       'play-circle-outline';
+            //   } else if (route.name === 'Réciteurs') {
+            //     iconName = focused ?
+            //       'man' :
+            //       'man-outline';
+            //   }
+
+            //   // You can return any component that you like here!
+            //   return <Ionicons name={iconName} size={30} color={secondary} />;
+            // },
+            tabBarActiveTintColor: primary,
+            headerTitleAlign: 'center',
+            headerTitleStyle: {
+              fontSize: 22,
+              color: primary,
+              padding: 4
+            },
+            tabBarStyle: {
+              height: 60,
+              color: primary,
+            },
+          })}
+        >
+          <Stack.Screen name="Sourates" component={Sourates} />
+          <Stack.Screen name='Lecture' component={Player} />
+          <Stack.Screen name="Réciteurs" component={Reciteurs} />
+
+        </Stack.Navigator>
       </NavigationContainer>
     </GlobalContext.Provider>
   );

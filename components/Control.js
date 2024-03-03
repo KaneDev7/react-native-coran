@@ -18,6 +18,8 @@ export default function Control() {
     isPlaying,
     setIsFirstStart,
     setIsplaying,
+    setPlayPauseIcon,
+    playPauseIcon,
     setCurrentSlide,
     selectSartVerset,
     setSurahNumber,
@@ -27,7 +29,6 @@ export default function Control() {
     setCorantText
   } = useContext(GlobalContext)
 
-  const [playPauseIcon, setPlayPauseIcon] = useState('play')
 
 
 

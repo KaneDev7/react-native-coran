@@ -8,56 +8,69 @@ import Control from '../components/Control';
 import { useContext, useEffect } from 'react';
 import { GlobalContext } from '../App';
 import { sourates } from '../constants/sorats.list';
+import RciterBar from '../components/RciterBar'
+import Sourates from './Sourates';
+import Reciteurs from './Reciteurs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-export default function Player({ route }) {
-    const {
-        setIsplaying,
-        setCurrentSlide,
-        selectSartVerset,
-        setSurahNumber,
-        setCurrentIndex,
-        setSound,
-        setSurahTextValue,
-        setCorantText
-    } = useContext(GlobalContext)
+const Tab = createBottomTabNavigator();
 
 
-    const index =  route?.params?.sourateIndex || 1
-    useEffect(() => {
-        setSound(null)
-        setIsplaying(false)
-        setCurrentSlide(selectSartVerset)
-        setCurrentIndex(index)
-        setSurahNumber(sourates[index].numero)
-        setSurahTextValue(sourates[index].nom)
-        setCorantText('')
-    }, [index])
+    export default function Player({ navigation, route }) {
 
-    return (
-        <View style={styles.container}>
-            <TextContainer />
-            <SelectSurah />
-            <Track />
-            <SelectVerset />
+        const {
+            setIsplaying,
+            setCurrentSlide,
+            selectSartVerset,
+            setPlayPauseIcon,
+            setSurahNumber,
+            setCurrentIndex,
+            setSound,
+            setSurahTextValue,
+            setCorantText
+        } = useContext(GlobalContext)
+
+
+        const index = route?.params?.sourateIndex || 0
+
+        useEffect(() => {
+            setSound(null)
+            setIsplaying(false)
+            setPlayPauseIcon('play')
+            setCurrentSlide(selectSartVerset)
+            setCurrentIndex(index)
+            setSurahNumber(sourates[index].numero)
+            setSurahTextValue(sourates[index].nom)
+            setCorantText('')
+        }, [index])
+
+        return (
             <View style={styles.container}>
-                <Control />
+                <RciterBar navigation={navigation}/>
+                <TextContainer />
+                <SelectSurah />
+                <Track />
+                <SelectVerset />
+                <View style={styles.container}>
+                    <Control />
+                </View>
+                <StatusBar style="auto" />
             </View>
-            <StatusBar style="auto" />
-        </View>
-    )
-}
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-    },
-    surahContent: {
-        marginVertical: 20
-    },
-    surahText: {
-        fontSize: 25,
+        )
     }
-});
+ 
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            backgroundColor: '#fff',
+            alignItems: 'center',
+            paddingTop : 10
+        },
+        surahContent: {
+            marginVertical: 20
+        },
+        surahText: {
+            fontSize: 25,
+        }
+    });

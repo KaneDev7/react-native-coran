@@ -1,14 +1,11 @@
 import { View, FlatList, Text, TouchableNativeFeedback, StyleSheet } from 'react-native'
 import { sourates } from '../constants/sorats.list';
 import { primary, secondary, secondary3 } from '../style/variables';
-import { useContext } from 'react';
-import { GlobalContext } from '../App';
 
 
 
 const Item = ({ item,index, navigation }) => {
    
-
   return <TouchableNativeFeedback
     style={styles.touchableNative}
     onPress={() => navigation.navigate('Lecture', {sourateIndex : index})}

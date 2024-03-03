@@ -1,27 +1,58 @@
-import { View, FlatList, Text, TouchableNativeFeedback, StyleSheet,Image } from 'react-native'
+import { View, FlatList, Text, TouchableNativeFeedback, StyleSheet, Image } from 'react-native'
 import { sourates } from '../constants/sorats.list';
 import { primary, secondary, secondary3 } from '../style/variables';
 import { reciteurs } from '../constants/reciteurs';
+import { useContext } from 'react';
+import { GlobalContext } from '../App';
+import { AntDesign } from '@expo/vector-icons';
 
+const Item = ({ item, index, navigation }) => {
 
-const Item = ({ item,index, navigation }) => {
-  
+  const {
+    setReciter,
+    reciter,
+    setIsplaying,
+    setCurrentSlide,
+    selectSartVerset,
+    setPlayPauseIcon,
+    setSound,
+    setCorantText
+  } = useContext(GlobalContext)
+
+  const iconNmae = reciter === item.title ? 'checkcircle' : 'checkcircleo'
+
+  const handlePress = () => {
+    setSound(null)
+    setReciter(item.title)
+    setIsplaying(true)
+    setPlayPauseIcon('play')
+    setCurrentSlide(selectSartVerset)
+    setCorantText('')
+    setTimeout(() => {
+      navigation.navigate('Sourates', { sourateIndex: index })
+    }, 1000)
+  }
+
   return <TouchableNativeFeedback
     style={styles.touchableNative}
-    onPress={() => navigation.navigate('Lecture', {sourateIndex : index})}
+    onPress={handlePress}
   >
     <View style={styles.item} >
       <View style={styles.itemRight} >
         <View style={styles.itemRightVerset} >
-        <Image
-        style={styles.image}
-        source={item.url}
-      />
+          <Image
+            style={styles.image}
+            source={item.url}
+          />
         </View>
         <Text style={styles.suratText} > {item.name} </Text>
       </View>
-    </View>
+      {
 
+
+      }
+      <AntDesign name={iconNmae} size={20} color={secondary} />
+    </View>
   </TouchableNativeFeedback>
 
 };
@@ -50,24 +81,24 @@ const styles = StyleSheet.create({
   },
   item: {
     display: 'flex',
-    alignItems: 'center',
-    flexDirection :'row',
+    alignItems: 'center', 
+    flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: 'white',
     paddingHorizontal: 30,
-    paddingVertical : 40,
-    marginBottom :20,
+    paddingVertical: 20,
+    marginBottom: 20,
     color: primary,
   },
   suratText: {
-    fontSize : 23,
-    fontWeight : '600',
-    color : primary
+    fontSize: 20,
+    fontWeight: '600',
+    color: primary
   },
   itemRight: {
     display: 'flex',
     alignItems: 'center',
-    flexDirection :'row',
+    flexDirection: 'row',
     gap: 30,
   },
   itemRightVerset: {
@@ -76,17 +107,17 @@ const styles = StyleSheet.create({
     borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent : 'center',
+    justifyContent: 'center',
     borderWidth: 1,
     borderColor: secondary,
   },
-  itemRightVersetText : {
-    fontSize : 15
+  itemRightVersetText: {
+    fontSize: 15
   },
-  image:{
-    width : 70,
-    height : 70,
-    borderRadius : '50%'
+  image: {
+    width: 60,
+    height: 60,
+    borderRadius: '50%'
   }
 
 });
